@@ -2,5 +2,5 @@ streamlit
 Pillow
 google-generativeai
 toml
-textwrap
+
 
