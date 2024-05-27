@@ -8,7 +8,7 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # 업데이트된 Assistant ID
-assistant_id = "asst_OCLRBXXLG5aioaFLvZI4wGeu"
+assistant_id = "asst_qr6yYrBcphrf4SN52S2ZdEyM"
 
 # 페이지 설정
 st.set_page_config(page_title="GREEN 환경 AI챗봇", page_icon="🧠")
