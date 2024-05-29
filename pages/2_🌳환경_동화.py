@@ -32,10 +32,12 @@ if generate_button and presentation_text:
 
     try:
         # OpenAI API를 호출하여 이미지 생성
-        response = openai.Image.create(
+        image_response = client.images.generate(
+            model="dall-e-3",
             prompt=prompt,
-            n=1,
-            size="1024x1024"
+            size="1024x1024",
+            quality="standard",
+            n=1
         )
 
         # 생성된 이미지 표시
