@@ -1,7 +1,6 @@
 streamlit
 Pillow
 google-generativeai
-os
 openai
 
 
