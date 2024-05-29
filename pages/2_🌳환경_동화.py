@@ -1,23 +1,30 @@
 import streamlit as st
-import openai
-import os
+from openai import OpenAI
+import random
 
-# secrets.toml 파일에서 API 키 가져오기
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-openai.api_key = os.environ["OPENAI_API_KEY"]
+# secrets.toml에 저장된 API 키들을 리스트로 준비
+api_keys = [
+    st.secrets["api_key1"],
+    st.secrets["api_key2"],
+    st.secrets["api_key3"],
+    st.secrets["api_key4"],
+    st.secrets["api_key5"],
+    st.secrets["api_key6"]
+]
 
-# if 'api_key' not in st.session_state:
-#     # API 키를 랜덤하게 선택하여 세션 상태에 저장
-#     st.session_state.api_key = random.choice(api_keys)
+# 세션 상태에서 현재 API 키를 관리
+if 'api_key' not in st.session_state:
+    # API 키를 랜덤하게 선택하여 세션 상태에 저장
+    st.session_state.api_key = random.choice(api_keys)
 
-# client = OpenAI(api_key=st.session_state.api_key)
+client = OpenAI(api_key=st.session_state.api_key)
 
 # 페이지 레이아웃 설정
 st.set_page_config(layout="wide")
 
-st.title("이미지 생성 보조 도구(2)")
+st.title("이미지 생성 보조 도구(1)")
 
-# 발표문 입력
+    # 발표문 입력
 presentation_text = st.text_area("발표문을(전체 혹은 일부) 입력하세요.", height=300)
 
 # 이미지 스타일 선택
