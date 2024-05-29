@@ -47,13 +47,13 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 사이드바 설정
-with st.sidebar:
-    st.subheader("추천 질문")
-    st.info("배려(덕목)의 뜻은?")
-    st.info("생활속에서 예절을 지키지 않는 상황을 알려줘")
-    st.info("예절에 대해서 설명해줘")
-    st.info("정의의 덕목과 이야기를 들려줘")
+# # 사이드바 설정
+# with st.sidebar:
+#     st.subheader("추천 질문")
+#     st.info("배려(덕목)의 뜻은?")
+#     st.info("생활속에서 예절을 지키지 않는 상황을 알려줘")
+#     st.info("예절에 대해서 설명해줘")
+#     st.info("정의의 덕목과 이야기를 들려줘")
 
 # 초기 스레드 생성
 if "thread_id" not in st.session_state:
