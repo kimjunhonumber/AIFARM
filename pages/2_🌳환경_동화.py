@@ -1,5 +1,5 @@
 import streamlit as st
-import openai import OpenAI
+from openai import OpenAI
 import os
 
 # secrets.toml 파일에서 API 키 가져오기
