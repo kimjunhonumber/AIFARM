@@ -1,10 +1,9 @@
+from openai import OpenAI
 import streamlit as st
-import openai
 import os
 
-# secrets.toml 파일에서 API 키 가져오기
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-openai.api_key = os.environ["OPENAI_API_KEY"]
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 st.set_page_config(layout="wide")
 
@@ -14,7 +13,7 @@ st.title("🌳 환경동화 이미지 만들기 🌈")
 presentation_text = st.text_area("📖 동화의 스토리 내용을 입력해보세요.", height=300)
 
 # 이미지 스타일 선택
-image_style = st.selectbox("🖌️ 이미지 스타일 선택", ["사실적", "미니멀 일러스트레이션", "만화적", "웹툰"])
+image_style = st.selectbox("🖌️ 이미지 스타일 선택", ["사실적", "미니멀 일러스트레이션", "만화적","웹툰"])
 
 # 이미지 생성 버튼
 generate_button = st.button("🎨 이미지 생성")
@@ -32,14 +31,16 @@ if generate_button and presentation_text:
 
     try:
         # OpenAI API를 호출하여 이미지 생성
-        response = openai.Image.create(
+        image_response = client.images.generate(
+            model="dall-e-3",
             prompt=prompt,
-            n=1,
-            size="1024x1024"
+            size="1024x1024",
+            quality="standard",
+            n=1
         )
 
         # 생성된 이미지 표시
-        generated_image_url = response['data'][0]['url']
+        generated_image_url = image_response.data[0].url
         st.image(generated_image_url, caption="🌟 환경 동화 스토리 🌟")
 
         # 이미지 다운로드 버튼 생성
