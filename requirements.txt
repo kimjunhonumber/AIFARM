@@ -1,8 +1,7 @@
+openai
 streamlit
+wikipedia==1.4.0
 Pillow
-google-generativeai
-openai==0.28
-
-
+google.generativeai
 
 
