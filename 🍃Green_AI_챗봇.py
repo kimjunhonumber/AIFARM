@@ -4,6 +4,7 @@ import time
 import os
 
 # API 키 설정
+
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
