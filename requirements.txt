@@ -1,7 +1,8 @@
 streamlit
 Pillow
 google-generativeai
-openai==0.28
+openai
+
 
 
 
