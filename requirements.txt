@@ -1,7 +1,0 @@
-openai
-streamlit
-wikipedia==1.4.0
-Pillow
-google.generativeai
-
-
