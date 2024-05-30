@@ -4,9 +4,11 @@ import time
 import random
 import os
 
+
 # API 키 설정
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
 
 # 업데이트된 Assistant ID
 assistant_id = "asst_qr6yYrBcphrf4SN52S2ZdEyM"
@@ -129,3 +131,5 @@ if prompt := st.chat_input():
         full_message += char
         message_placeholder.write(f"🐶 {full_message}")
         time.sleep(0.05)  # 출력 속도 조절
+
+
