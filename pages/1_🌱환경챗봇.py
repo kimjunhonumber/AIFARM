@@ -17,10 +17,6 @@ def to_markdown(text):
 # with open(secrets_path, "r") as f:
 #     secrets = toml.load(f)
 
-# secrets.toml 파일에서 gemini_api_key1 값 가져오기
-gemini_api_key="AIzaSyAZifQ50OlSgaXpH9cMQ8rUzybcsNlu6RE"
-
-
 # Gemini API 키 설정
 genai.configure(api_key=gemini_api_key)
 
