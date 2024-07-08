@@ -141,4 +141,4 @@ if st.button("결과 보기"):
             data=txt_file,
             file_name="generated_moral_document.txt",
             mime="text/plain"
-        ) 안에 내용만 나의친환경 생활 태도 평가서로 바꿔조 다른건 일절 코드는 건딜지마
+        ) 
