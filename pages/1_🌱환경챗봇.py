@@ -9,7 +9,7 @@ import io
 def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
-gemini_api_key1="AIzaSyAZifQ50OlSgaXpH9cMQ8rUzybcsNlu6RE"
+
 # # secrets.toml 파일 경로
 # secrets_path = pathlib.Path(__file__).parent.parent / "CHAT-GPT-PRG.streamlit/secrets.toml"
 
@@ -18,7 +18,7 @@ gemini_api_key1="AIzaSyAZifQ50OlSgaXpH9cMQ8rUzybcsNlu6RE"
 #     secrets = toml.load(f)
 
 # Gemini API 키 설정
-genai.configure(api_key=gemini_api_key)
+genai.configure(api_key=AIzaSyAZifQ50OlSgaXpH9cMQ8rUzybcsNlu6RE)
 
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")
