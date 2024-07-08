@@ -6,7 +6,8 @@ from io import BytesIO  # 파일 다운로드를 위해 필요
 import os
 
 # API 키 설정
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # 페이지 제목 설정
 st.set_page_config(page_title="나의 탄소 발자국 테스트")
