@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import streamlit as st
 import time
 import random
@@ -8,6 +8,7 @@ import os
 # API 키 설정
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
 
 # 페이지 제목 설정
 st.set_page_config(page_title="나의 탄소 발자국 테스트")
