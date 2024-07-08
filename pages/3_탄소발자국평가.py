@@ -24,52 +24,52 @@ st.markdown("## ■ 탄소 발자국 테스트를 위한 설문입니다. 내가
 # 질문 1
 question1 = "1_매일 대중교통을 이용한다."
 response1 = st.radio(f"1. {question1}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response1_value = int(response1[0]) if response1 else 0
+response1_value = int(response1.split(" - ")[0]) if response1 else 0
 
 # 질문 2
 question2 = "2_ 일주일에 몇 번 고기를 소비한다."
 response2 = st.radio(f"2. {question2}", ["5 - 매우 자주", "4 - 자주", "3 - 가끔", "2 - 거의 안 한다", "1 - 전혀 안 한다"])
-response2_value = int(response2[0]) if response2 else 0
+response2_value = int(response2.split(" - ")[0]) if response2 else 0
 
 # 질문 3
 question3 = "3_ 나는 일회용 플라스틱을 자주 사용한다."
 response3 = st.radio(f"3. {question3}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response3_value = int(response3[0]) if response3 else 0
+response3_value = int(response3.split(" - ")[0]) if response3 else 0
 
 # 질문 4
 question4 = "4_ 에너지 절약을 위해 전기를 아껴 쓴다."
 response4 = st.radio(f"4. {question4}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response4_value = int(response4[0]) if response4 else 0
+response4_value = int(response4.split(" - ")[0]) if response4 else 0
 
 # 질문 5
 question5 = "5_ 재활용을 꾸준히 실천한다."
 response5 = st.radio(f"5. {question5}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response5_value = int(response5[0]) if response5 else 0
+response5_value = int(response5.split(" - ")[0]) if response5 else 0
 
 # 질문 6
 question6 = "6_ 자주 비행기를 탄다."
 response6 = st.radio(f"6. {question6}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response6_value = int(response6[0]) if response6 else 0
+response6_value = int(response6.split(" - ")[0]) if response6 else 0
 
 # 질문 7
 question7 = "7_ 친환경 제품을 구매하는 것을 선호한다."
 response7 = st.radio(f"7. {question7}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response7_value = int(response7[0]) if response7 else 0
+response7_value = int(response7.split(" - ")[0]) if response7 else 0
 
 # 질문 8
 question8 = "8_ 에너지 효율이 높은 가전제품을 사용한다."
 response8 = st.radio(f"8. {question8}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response8_value = int(response8[0]) if response8 else 0
+response8_value = int(response8.split(" - ")[0]) if response8 else 0
 
 # 질문 9
 question9 = "9_ 나무 심기와 같은 환경 보호 활동에 참여한다."
 response9 = st.radio(f"9. {question9}", ["5 - 매우 자주", "4 - 자주", "3 - 가끔", "2 - 거의 안 한다", "1 - 전혀 안 한다"])
-response9_value = int(response9[0]) if response9 else 0
+response9_value = int(response9.split(" - ")[0]) if response9 else 0
 
 # 질문 10
 question10 = "10_ 물을 절약해서 사용한다."
 response10 = st.radio(f"10. {question10}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"])
-response10_value = int(response10[0]) if response10 else 0
+response10_value = int(response10.split(" - ")[0]) if response10 else 0
 
 # 응답 저장
 responses = [
@@ -118,7 +118,7 @@ def analyze_carbon_footprint(name, responses, thoughts, total_score):
             max_tokens=1000,
             temperature=0.7
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0]['message']['content'].strip()
     except Exception as e:
         st.error(f"API 요청 중 오류가 발생했습니다: {e}")
         return None
@@ -143,4 +143,3 @@ if st.button("결과 보기"):
             file_name="carbon_footprint_report.txt",
             mime="text/plain"
         )
-
