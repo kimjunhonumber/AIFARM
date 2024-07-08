@@ -153,4 +153,32 @@ def analyze_moral_data(name, responses, thoughts):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": persona},
-                {"role": "user", "content": "탄소 발자국 테스트 데이터에 대한 분석과 피
+                {"role": "user", "content": "탄소 발자국 테스트 데이터에 대한 분석과 피드백을 제공해 주세요."}
+            ],
+            max_tokens=1000,
+            temperature=0.7
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        st.error(f"API 요청 중 오류가 발생했습니다: {e}")
+        return None
+
+# 결과 분석 및 피드백
+if st.button("결과 보기"):
+    analysis = analyze_moral_data(name, responses, thoughts)
+
+    if analysis:
+        # 분석 결과 출력
+        st.markdown("<div class='result-title'>탄소 발자국 테스트 결과</div>", unsafe_allow_html=True)
+        st.write(analysis)
+        
+        # 생성된 도덕적 행동 평가서를 TXT 파일로 변환
+        txt_file = BytesIO(analysis.encode('utf-8'))
+        
+        # 다운로드 링크 제공
+        st.download_button(
+            label="탄소 발자국 평가서 다운로드",
+            data=txt_file,
+            file_name="generated_moral_document.txt",
+            mime="text/plain"
+        )
