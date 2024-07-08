@@ -109,16 +109,13 @@ def analyze_carbon_footprint(name, responses, thoughts, total_score):
     '''
 
     try:
-        response = client.chat.completions.create(
+        response = client.Completion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": persona},
-                {"role": "user", "content": "탄소 발자국 데이터에 대한 분석과 피드백을 제공해 주세요."}
-            ],
+            prompt=persona,
             max_tokens=1000,
             temperature=0.7
         )
-        return response.choices[0]['message']['content'].strip()
+        return response.choices[0]['text'].strip()
     except Exception as e:
         st.error(f"API 요청 중 오류가 발생했습니다: {e}")
         return None
