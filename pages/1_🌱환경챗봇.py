@@ -9,7 +9,7 @@ import io
 def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
-
+gemini_api_key1="AIzaSyAZifQ50OlSgaXpH9cMQ8rUzybcsNlu6RE"
 # # secrets.toml 파일 경로
 # secrets_path = pathlib.Path(__file__).parent.parent / "CHAT-GPT-PRG.streamlit/secrets.toml"
 
