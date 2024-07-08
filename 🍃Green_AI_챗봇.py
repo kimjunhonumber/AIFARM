@@ -67,17 +67,17 @@ with st.sidebar:
         st.info("스레드 ID를 기억하면 대화내용을 이어갈 수 있습니다.")
         st.divider()
         st.subheader("추천 질문")
-        st.info("배려(덕목)의 뜻은?")
-        st.info("생활속에서 예절을 지키지 않는 상황을 알려줘")
-        st.info("예절에 대해서 설명해줘")
-        st.info("정의의 덕목과 이야기를 들려줘")
+        st.info("제로 웨이스트를 실천하는 방법은?")
+        st.info("탄소 발자국을 줄이는 방법은?")
+        st.info("화장품 용기 분리 수거는?")
+        st.info("생물종이 다양해야 하는 이유는?")
 
 # 스레드 ID 입력란
 thread_id = st.text_input("Thread ID", value=st.session_state.thread_id)
 
 # 초기 메시지 설정
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 안녕하세요, 저는 생각AI 챗봇입니다. 먼저 왼쪽의 'Thread 생성'버튼을 눌러주세요. 무엇을 도와드릴까요?"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 안녕하세요, 저는 환경GREEN AI 챗봇입니다. 먼저 왼쪽의 'Thread 생성'버튼을 눌러주세요. 무엇을 도와드릴까요?"}]
 
 # 아이콘을 설정하는 함수
 def get_avatar(role):
