@@ -92,7 +92,7 @@ st.markdown("## ■ 인성 실천 행동을 한 나의 생각과 느낌을 적�
 thoughts = st.text_area("", "")
 
 @st.cache_data
-def analyze_moral_data(name, responses,  thoughts, ):
+def analyze_moral_data(name, responses, thoughts, ):
     data = {
         "이름": name,
         "응답": responses,
@@ -125,8 +125,7 @@ def analyze_moral_data(name, responses,  thoughts, ):
 
 # 결과 분석 및 피드백
 if st.button("결과 보기"):
-    total_score = sum([response['value'] for response in responses])
-    analysis = analyze_moral_data(name, responses, situation1, situation2, situation3, thoughts, total_score)
+    analysis = analyze_moral_data(name, responses, thoughts)
 
     if analysis:
         # 분석 결과 출력
