@@ -10,15 +10,18 @@ def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
-# # secrets.toml 파일 경로
-# secrets_path = pathlib.Path(__file__).parent.parent / "CHAT-GPT-PRG.streamlit/secrets.toml"
+# secrets.toml 파일 경로
+secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
 
-# # secrets.toml 파일 읽기
-# with open(secrets_path, "r") as f:
-#     secrets = toml.load(f)
+# secrets.toml 파일 읽기
+with open(secrets_path, "r") as f:
+    secrets = toml.load(f)
+
+# secrets.toml 파일에서 gemini_api_key1 값 가져오기
+gemini_api_key1 = secrets["gemini_api_key1"]
 
 # Gemini API 키 설정
-genai.configure(api_key=AIzaSyAZifQ50OlSgaXpH9cMQ8rUzybcsNlu6RE)
+genai.configure(api_key=gemini_api_key1)
 
 # 핸드폰 사진 업로드 기능 추가
 uploaded_file = st.file_uploader("핸드폰 사진 업로드")
