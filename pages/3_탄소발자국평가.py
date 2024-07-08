@@ -1,4 +1,4 @@
-from openai import OpenAI
+import openai
 import streamlit as st
 import time
 import random
@@ -6,9 +6,7 @@ from io import BytesIO  # 파일 다운로드를 위해 필요
 import os
 
 # API 키 설정
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # 페이지 제목 설정
 st.set_page_config(page_title="나의 탄소 발자국 테스트")
@@ -119,7 +117,7 @@ def analyze_carbon_footprint(name, responses, thoughts, total_score):
             max_tokens=1000,
             temperature=0.7
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0]['message']['content'].strip()
     except Exception as e:
         st.error(f"API 요청 중 오류가 발생했습니다: {e}")
         return None
@@ -144,3 +142,4 @@ if st.button("결과 보기"):
             file_name="carbon_footprint_report.txt",
             mime="text/plain"
         )
+
