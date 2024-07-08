@@ -25,7 +25,7 @@ st.markdown("""
         color: #333333; /* 진한 회색 텍스트 */
     }
     .stSidebar {
-        background-color: #d4edda; /* 연한 녹색 사이드바 */
+        background-color: #ffffff; /* 흰색 사이드바 */
         color: #333333; /* 진한 회색 텍스트 */
     }
     .stButton > button {
@@ -47,10 +47,6 @@ st.markdown("""
         color: #333333; /* 진한 회색 텍스트 */
         border-radius: 10px; /* 둥근 모서리 */
         padding: 10px; /* 패딩 추가 */
-    }
-    .css-1aumxhk {
-        background-color: #d4edda; /* 연한 녹색 */
-        color: #333333; /* 진한 회색 텍스트 */
     }
     </style>
     """, unsafe_allow_html=True)
@@ -76,16 +72,12 @@ with st.sidebar:
         st.info("화장품 용기 분리 수거는?")
         st.info("생물종이 다양해야 하는 이유는?")
 
-# 스레드 ID가 없다면 자동 생성
-if not st.session_state.thread_id:
-    thread = client.beta.threads.create()
-    st.session_state.thread_id = thread.id
-
-thread_id = st.session_state.thread_id
+# 스레드 ID 입력란
+thread_id = st.text_input("Thread ID", value=st.session_state.thread_id)
 
 # 초기 메시지 설정
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 저는 환경GREEN AI 챗봇입니다. 무엇을 도와드릴까요?"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 안녕하세요, 저는 환경GREEN AI 챗봇입니다. 먼저 왼쪽의 'Thread 생성'버튼을 눌러주세요. 무엇을 도와드릴까요?"}]
 
 # 아이콘을 설정하는 함수
 def get_avatar(role):
@@ -98,6 +90,10 @@ for msg in st.session_state.messages:
 
 # 사용자 입력 처리
 if prompt := st.chat_input():
+    if not thread_id:
+        st.error("Please add your thread_id to continue.")
+        st.stop()
+
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user", avatar=get_avatar("user")).write(prompt)
 
@@ -134,4 +130,4 @@ if prompt := st.chat_input():
     for char in msg:
         full_message += char
         message_placeholder.write(f"🐶 {full_message}")
-        time.sleep(0.05)  # 출력 속도 조절
+        time.sleep(0.05) 
