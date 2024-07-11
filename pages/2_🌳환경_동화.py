@@ -45,7 +45,7 @@ if generate_button and presentation_text:
 
 
         # 생성된 이미지 표시
-        generated_image_url = response['data'][0]['url']
+        generated_image_url = image_response.data[0].url
         st.image(generated_image_url, caption="🖼️ 환경 동화 그림 🌿")
 
         # 이미지 다운로드 버튼 생성
