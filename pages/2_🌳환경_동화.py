@@ -6,7 +6,7 @@ import os
 
 # API 키 설정
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-openai.api_key = os.environ["OPENAI_API_KEY"]
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # 페이지 레이아웃 설정
 st.set_page_config(layout="wide")
