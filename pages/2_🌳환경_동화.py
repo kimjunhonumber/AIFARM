@@ -35,15 +35,18 @@ if generate_button and presentation_text:
 
     try:
         # OpenAI API를 호출하여 이미지 생성
-        response = openai.Image.create(
+        image_response = client.images.generate(
+            model="dall-e-3",
             prompt=prompt,
-            n=1,
-            size="1024x1024"
+            size="1024x1024",
+            quality="standard",
+            n=1
         )
+
 
         # 생성된 이미지 표시
         generated_image_url = response['data'][0]['url']
-        st.image(generated_image_url, caption="🖼️ 나의 문제상황 🌿")
+        st.image(generated_image_url, caption="🖼️ 환경 동화 그림 🌿")
 
         # 이미지 다운로드 버튼 생성
         st.markdown(f"[📥 이미지 다운로드]({generated_image_url})", unsafe_allow_html=True)
