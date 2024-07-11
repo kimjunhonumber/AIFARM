@@ -1,5 +1,7 @@
-import openai
+from openai import OpenAI
 import streamlit as st
+import time
+import random
 import os
 
 # API 키 설정
