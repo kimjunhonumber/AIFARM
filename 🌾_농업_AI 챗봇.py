@@ -14,8 +14,8 @@ client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 assistant_id = "asst_qr6yYrBcphrf4SN52S2ZdEyM"
 
 # 페이지 설정
-st.set_page_config(page_title="환경GREEN AI", page_icon="🍃")
-st.title("🍃환경GREEN AI")
+st.set_page_config(page_title="농업 AI 챗봇", page_icon="🍃")
+st.title("🍃AI 농업 스마트팜")
 
 
 st.markdown("""
