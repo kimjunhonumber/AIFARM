@@ -35,7 +35,7 @@ if uploaded_file is not None:
     st.image(img, caption="업로드한 식물 사진", use_column_width=True)
 
     # 모델 불러오기
-    model = genai.GenerativeModel("gemini-pro-vision")
+    model = genai.GenerativeModel("gemini-1.5-flash")
 
     # 프롬프트
     prompt = '''이 사진 속 식물을 보고 아래 세 가지를 판단해 주세요.
