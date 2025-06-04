@@ -8,6 +8,11 @@ from PIL import Image
 import io
 import base64
 
+from google.generativeai import GenerativeModel
+from google.generativeai.types.content_types import Content, ImagePart
+
+
+
 def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
