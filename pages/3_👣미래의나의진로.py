@@ -1,185 +1,95 @@
+
 from openai import OpenAI
 import streamlit as st
-import time
-import random
-from io import BytesIO  # 파일 다운로드를 위해 필요
 import os
+from io import BytesIO
 
 # API 키 설정
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # 페이지 제목 설정
-st.set_page_config(page_title="나의 탄소 발자국 평가서")
+st.set_page_config(page_title="미래 AI 진로 탐색")
 
-# CSS 스타일 설정
+# CSS 스타일
 st.markdown("""
     <style>
-        .title {
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            color: #4CAF50;
-            margin-top: 20px;
-        }
-        .subtitle {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        .question {
-            font-size: 18px;
-            color: #333;
-        }
-        .response {
-            margin-bottom: 15px;
-        }
-        .textarea {
-            width: 100%;
-            height: 100px;
-        }
-        .button {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .result-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #FF5722;
-            margin-top: 20px;
-        }
+        .title {font-size: 36px; font-weight: bold; text-align: center; color: #4CAF50; margin-top: 20px;}
+        .subtitle {font-size: 24px; font-weight: bold; text-align: center; color: #555; margin-bottom: 20px;}
+        .result-title {font-size: 24px; font-weight: bold; color: #FF5722; margin-top: 20px;}
     </style>
 """, unsafe_allow_html=True)
 
-# 제목
-st.markdown("<div class='title'>나의 탄소 발자국 테스트</div>", unsafe_allow_html=True)
+st.markdown("<div class='title'>🧠 나의 AI 진로 탐색 테스트</div>", unsafe_allow_html=True)
 
-# 사용자 이름 입력
 name = st.text_input("■ 이름을 적으세요", "")
 
-# 설문 문항
-st.markdown("<div class='subtitle'>■ 탄소 발자국 테스트를 위한 설문입니다. 내가 생각하는 정도를 체크해 보세요</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>■ 아래 질문에 답하며, AI와 기술에 대한 나의 생각을 확인해 보세요.</div>", unsafe_allow_html=True)
 
-# 질문 1
-question1 = "1_나는 일상 생활에서 일회용품 사용을 줄이려고 노력한다."
-response1 = st.radio(f"1. {question1}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q1")
-response1_value = int(response1[0]) if response1 else 0
-
-# 질문 2
-question2 = "2_ 나는 자전거나 대중교통을 자주 이용한다."
-response2 = st.radio(f"2. {question2}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q2")
-response2_value = int(response2[0]) if response2 else 0
-
-# 질문 3
-question3 = "3_ 나는 에너지를 절약하기 위해 집에서 불필요한 전등을 끈다."
-response3 = st.radio(f"3. {question3}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q3")
-response3_value = int(response3[0]) if response3 else 0
-
-# 질문 4
-question4 = "4_ 나는 지역 식품을 구매하여 식품 운송으로 인한 탄소 배출을 줄이려고 한다."
-response4 = st.radio(f"4. {question4}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q4")
-response4_value = int(response4[0]) if response4 else 0
-
-# 질문 5
-question5 = "5_ 나는 재활용을 적극적으로 실천한다."
-response5 = st.radio(f"5. {question5}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q5")
-response5_value = int(response5[0]) if response5 else 0
-
-# 질문 6
-question6 = "6_나는 탄소 배출을 줄이기 위해 채식을 고려하거나 실천하고 있다."
-response6 = st.radio(f"6. {question6}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q6")
-response6_value = int(response6[0]) if response6 else 0
-
-# 질문 7
-question7 = "7_ 나는 물을 절약하기 위해 샤워 시간을 줄인다."
-response7 = st.radio(f"7. {question7}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q7")
-response7_value = int(response7[0]) if response7 else 0
-
-# 질문 8
-question8 = "8_ 나는 전기 자동차나 하이브리드 차량을 이용하려고 한다."
-response8 = st.radio(f"8. {question8}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q8")
-response8_value = int(response8[0]) if response8 else 0
-
-# 질문 9
-question9 = "9_나는 에너지 효율이 높은 가전 제품을 사용한다."
-response9 = st.radio(f"9. {question9}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q9")
-response9_value = int(response9[0]) if response9 else 0
-
-# 질문 10
-question10 = "10_나는 탄소 배출을 줄이기 위해 여행을 자제하거나 가까운 곳으로 간다."
-response10 = st.radio(f"10. {question10}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key="q10")
-response10_value = int(response10[0]) if response10 else 0
-
-# 응답 저장
-responses = [
-    {"question": question1, "response": response1, "value": response1_value},
-    {"question": question2, "response": response2, "value": response2_value},
-    {"question": question3, "response": response3, "value": response3_value},
-    {"question": question4, "response": response4, "value": response4_value},
-    {"question": question5, "response": response5, "value": response5_value},
-    {"question": question6, "response": response6, "value": response6_value},
-    {"question": question7, "response": response7, "value": response7_value},
-    {"question": question8, "response": response8, "value": response8_value},
-    {"question": question9, "response": response9, "value": response9_value},
-    {"question": question10, "response": response10, "value": response10_value}
+questions = [
+    "1_ 나는 새로운 기술(AI, 앱 등)을 배우는 것이 흥미롭다.",
+    "2_ 나는 문제를 해결할 때 기술을 활용하려고 노력한다.",
+    "3_ 나는 친구들과 협업해서 디지털 도구를 잘 활용한다.",
+    "4_ 나는 AI가 세상을 바꾸고 있다고 느낀다.",
+    "5_ 나는 AI와 관련된 직업에 관심이 있다.",
+    "6_ 나는 데이터를 읽고 이해하는 데 관심이 있다.",
+    "7_ 나는 스마트기기나 로봇을 다루는 것이 재미있다.",
+    "8_ 나는 나만의 앱이나 프로그램을 만들어보고 싶다.",
+    "9_ 나는 사회 문제를 AI로 해결할 수 있을까 고민해본 적이 있다.",
+    "10_ 나는 미래에 어떤 기술이 필요할지 생각해본 적이 있다."
 ]
 
-# 인성 실천 행동에 대한 생각과 느낌
-st.markdown("<div class='subtitle'>■탄소 발자국 실천 행동을 한 나의 생각과 느낌을 적어 보세요</div>", unsafe_allow_html=True)
+responses = []
+for i, q in enumerate(questions):
+    key = f"q{i+1}"
+    r = st.radio(f"{i+1}. {q}", ["5 - 매우 그렇다", "4 - 조금 그렇다", "3 - 보통이다", "2 - 별로 그렇지 않다", "1 - 전혀 그렇지 않다"], key=key)
+    responses.append({"question": q, "response": r, "value": int(r[0]) if r else 0})
+
+st.markdown("<div class='subtitle'>■AI와 기술에 대해 느낀 점이나 꿈을 자유롭게 적어 보세요</div>", unsafe_allow_html=True)
 thoughts = st.text_area("", "", key="thoughts")
 
 @st.cache_data
-def analyze_moral_data(name, responses, thoughts):
-    data = {
-        "이름": name,
-        "응답": responses,
-        "생각과 느낌": thoughts,
-    }
+def analyze_ai_profile(name, responses, thoughts):
+    prompt = f'''
+이 프롬프트는 초등학생의 AI 역량과 기술 적응력, 창의적 문제 해결 태도를 분석하고 그에 맞는 미래형 직업을 추천하는 GPT입니다.
+학생이 응답한 내용을 바탕으로 다음 두 가지를 작성해주세요:
 
-    persona = f'''
-        이 프롬프트는 사용자로부터 제공된 탄소 발자국 테스트 데이터를 분석하고 피드백을 제공하는 GPT 모델입니다.
-    사용자가 제공한 탄소 발자국과 관련된 선택 상황, 겪은 상황, 판단, 느낌, 행동 등을 기반으로 탄소 발자국 피드백을 작성합니다. 양식은 <결과> 탄소 발자국 분석 결과는 종합적으로 결과를 판단해서 최대한 상세하게 이야기 해준다. 점수는 제시하지 않는다. <피드백> 결과에 대한 피드백으로 제공합니다.
-    다음은 사용자가 제공한 내용입니다:
-    이름: {name}
-    응답: {responses}
-    생각과 느낌: {thoughts}
-    '''
+<결과>
+학생의 AI 적응력, 창의성, 협업, 문제해결력 등을 분석하여 특성을 종합적으로 설명해주세요.
+
+<추천 직업>
+학생의 특성과 응답을 바탕으로 어울리는 미래형 직업 3가지를 추천하고, 그 이유를 간단히 덧붙여주세요.
+
+입력된 정보는 다음과 같습니다:
+이름: {name}
+응답: {responses}
+생각과 느낌: {thoughts}
+'''
 
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": persona},
-                {"role": "user", "content": "탄소 발자국 테스트 데이터에 대한 분석과 피드백을 제공해 주세요."}
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": "이 학생의 미래 AI 진로 분석 결과를 작성해주세요."}
             ],
             max_tokens=1000,
             temperature=0.7
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        st.error(f"API 요청 중 오류가 발생했습니다: {e}")
+        st.error(f"GPT 요청 중 오류가 발생했습니다: {e}")
         return None
 
-# 결과 분석 및 피드백
 if st.button("결과 보기"):
-    analysis = analyze_moral_data(name, responses, thoughts)
-
+    analysis = analyze_ai_profile(name, responses, thoughts)
     if analysis:
-        # 분석 결과 출력
-        st.markdown("<div class='result-title'>탄소 발자국 테스트 결과</div>", unsafe_allow_html=True)
+        st.markdown("<div class='result-title'>📄 AI 진로 분석 결과</div>", unsafe_allow_html=True)
         st.write(analysis)
-        
-        # 생성된 도덕적 행동 평가서를 TXT 파일로 변환
         txt_file = BytesIO(analysis.encode('utf-8'))
-        
-        # 다운로드 링크 제공
         st.download_button(
-            label="탄소 발자국 평가서 다운로드",
+            label="AI 진로 리포트 다운로드",
             data=txt_file,
-            file_name="generated_moral_document.txt",
+            file_name="AI_진로_리포트.txt",
             mime="text/plain"
         )
-
