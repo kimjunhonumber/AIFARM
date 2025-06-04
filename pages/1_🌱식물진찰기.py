@@ -1,4 +1,3 @@
-
 import pathlib
 import textwrap
 import google.generativeai as genai
@@ -8,10 +7,7 @@ from PIL import Image
 import io
 import base64
 
-from google.generativeai import GenerativeModel
-from google.generativeai.types.content_types import Content, ImagePart
-
-
+# ... (your existing imports)
 
 def to_markdown(text):
     text = text.replace('•', '*')
@@ -38,9 +34,6 @@ if uploaded_file is not None:
     img = Image.open(io.BytesIO(img_bytes))
     st.image(img, caption="업로드한 식물 사진", use_column_width=True)
 
-    # 이미지 Base64 인코딩 처리
-    base64_img = base64.b64encode(img_bytes).decode("utf-8")
-
     # 모델 불러오기
     model = genai.GenerativeModel("gemini-pro-vision")
 
@@ -53,15 +46,19 @@ if uploaded_file is not None:
 
 설명은 초등학생도 이해할 수 있도록 친절하고 쉽게 말해주세요.'''
 
-    # 요청 전송
-    response = model.generate_content([
-        {"text": prompt},
-        {"inline_data": {"mime_type": "image/png", "data": img_bytes}}
-    ])
-
-    response.resolve()
-    st.markdown("### 🔍 분석 결과")
-    st.markdown(to_markdown(response.text))
+    # 요청 전송 및 스피너 표시
+    with st.spinner("🔍 식물 상태를 분석 중입니다. 잠시만 기다려주세요..."):
+        try:
+            response = model.generate_content([
+                {"text": prompt},
+                {"inline_data": {"mime_type": "image/png", "data": img_bytes}}
+            ])
+            response.resolve()
+            st.markdown("### 🔍 분석 결과")
+            st.markdown(to_markdown(response.text))
+        except Exception as e:
+            st.error(f"⚠️ 분석 중 오류가 발생했습니다: {e}")
+            st.info("다시 시도하거나 다른 이미지를 업로드해보세요.")
 
 else:
     st.info("AI에게 식물을 보여주세요 🌱")
