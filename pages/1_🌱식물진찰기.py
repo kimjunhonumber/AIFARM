@@ -1,7 +1,3 @@
-import pathlib
-import textwrap
-import google.generativeai as genai
-import streamlit as st
 import toml
 from PIL import Image
 import io
@@ -27,10 +23,18 @@ genai.configure(api_key=gemini_api_key1)
 # 페이지 구성
 st.title("🌿 식물 진찰기: 건강 상태, 병해충, 종류 판별")
 uploaded_file = st.file_uploader("📷 식물 사진을 업로드 해보세요", type=["jpg", "jpeg", "png"])
+camera_image = st.camera_input("📸 카메라로 식물 사진을 찍어보세요")
 
 if uploaded_file is not None:
     # 이미지 로딩 및 표시
+img_bytes = None
+if camera_image is not None:
+    img_bytes = camera_image.getvalue()
+elif uploaded_file is not None:
     img_bytes = uploaded_file.read()
+
+if img_bytes is not None:
+    # 이미지 로딩 및 표시
     img = Image.open(io.BytesIO(img_bytes))
     st.image(img, caption="업로드한 식물 사진", use_column_width=True)
 
@@ -56,9 +60,3 @@ if uploaded_file is not None:
             response.resolve()
             st.markdown("### 🔍 분석 결과")
             st.markdown(to_markdown(response.text))
-        except Exception as e:
-            st.error(f"⚠️ 분석 중 오류가 발생했습니다: {e}")
-            st.info("다시 시도하거나 다른 이미지를 업로드해보세요.")
-
-else:
-    st.info("AI에게 식물을 보여주세요 🌱")
