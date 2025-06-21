@@ -6,7 +6,7 @@
     "codespaces": {
       "openFiles": [
         "README.md",
-        "환경동화이미지.py"
+        "🌾_농업_AI 챗봇.py"
       ]
     },
     "vscode": {
@@ -19,7 +19,7 @@
   },
   "updateContentCommand": "[ -f packages.txt ] && sudo apt update && sudo apt upgrade -y && sudo xargs apt install -y <packages.txt; [ -f requirements.txt ] && pip3 install --user -r requirements.txt; pip3 install --user streamlit; echo '✅ Packages installed and Requirements met'",
   "postAttachCommand": {
-    "server": "streamlit run 환경동화이미지.py --server.enableCORS false --server.enableXsrfProtection false"
+    "server": "streamlit run \ud83c\udf3e_\ub18d\uc5b4_AI \ucc3d\ubc15.py --server.enableCORS false --server.enableXsrfProtection false"
   },
   "portsAttributes": {
     "8501": {
