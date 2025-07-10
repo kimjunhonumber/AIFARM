@@ -67,10 +67,10 @@ with st.sidebar:
         st.info("스레드 ID를 기억하면 대화내용을 이어갈 수 있습니다.")
         st.divider()
         st.subheader("추천 질문")
-        st.info("제로 웨이스트를 실천하는 방법은?")
-        st.info("탄소 발자국을 줄이는 방법은?")
-        st.info("화장품 용기 분리 수거는?")
-        st.info("생물종이 다양해야 하는 이유는?")
+        st.info("식물을 관리하는 방법은?")
+        st.info("상추를 키우는 방법은?")
+        st.info("스마트 팜이란?")
+        st.info("식물 키우기에서 중요한 방법은?")
 
 # 스레드 ID 입력란
 thread_id = st.text_input("Thread ID", value=st.session_state.thread_id)
