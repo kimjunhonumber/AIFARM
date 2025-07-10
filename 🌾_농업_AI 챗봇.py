@@ -1,133 +1,119 @@
 from openai import OpenAI
 import streamlit as st
 import time
-import random
 import os
 
-
-# API 키 설정
+# ───────────────────────────────────────────
+# ① 환경 변수 및 클라이언트
+# ───────────────────────────────────────────
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
+ASSISTANT_ID = "asst_0aakRbXEIqJJnO6QVm75yOFZ"
 
-# 업데이트된 Assistant ID
-assistant_id = "asst_0aakRbXEIqJJnO6QVm75yOFZ"
-
-# 페이지 설정
+# ───────────────────────────────────────────
+# ② 페이지 & 세션 초기화
+# ───────────────────────────────────────────
 st.set_page_config(page_title="농업 AI 챗봇", page_icon="🍃")
 st.title("🍃AI 농업 스마트팜")
 
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {
+            "role": "assistant",
+            "content": "안녕하세요! 먼저 왼쪽 ‘Thread 생성’ 버튼을 눌러 새 대화를 시작해주세요 🙂"
+        }
+    ]
+if "thread_id" not in st.session_state:
+    st.session_state.thread_id = ""
 
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #f9f9f9; /* 밝은 회색 배경 */
-        color: #333333; /* 진한 회색 텍스트 */
-    }
-    .stSidebar {
-        background-color: #ffffff; /* 흰색 사이드바 */
-        color: #333333; /* 진한 회색 텍스트 */
-    }
-    .stButton > button {
-        background-color: #4CAF50; /* 밝은 녹색 버튼 */
-        color: white; /* 흰색 텍스트 */
-        border-radius: 10px; /* 둥근 모서리 */
-    }
-    .stTextInput > div > input {
-        background-color: #f0f0f0; /* 밝은 회색 입력 상자 */
-        color: #333333; /* 진한 회색 텍스트 */
-        border-radius: 10px; /* 둥근 모서리 */
-    }
-    .stAlert {
-        background-color: #ffe4e1; /* 미스트로즈색 알림 */
-        color: #333333; /* 진한 회색 텍스트 */
-    }
-    .stMarkdown {
-        background-color: #ffffff; /* 흰색 마크다운 */
-        color: #333333; /* 진한 회색 텍스트 */
-        border-radius: 10px; /* 둥근 모서리 */
-        padding: 10px; /* 패딩 추가 */
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
-# 사이드바 설정
+# ───────────────────────────────────────────
+# ③ 사이드바 – Thread 생성
+# ───────────────────────────────────────────
 with st.sidebar:
-    if "thread_id" not in st.session_state:
-        st.session_state.thread_id = ""
-
-    thread_btn = st.button("Thread 생성")
-
-    if thread_btn:
+    if st.button("Thread 생성"):
         thread = client.beta.threads.create()
         st.session_state.thread_id = thread.id
-        st.subheader(f"Created Thread ID: {st.session_state.thread_id}")
-        st.info("스레드가 생성되었습니다.")
-        st.info("스레드 ID를 기억하면 대화내용을 이어갈 수 있습니다.")
-        st.divider()
-        st.subheader("추천 질문")
-        st.info("제로 웨이스트를 실천하는 방법은?")
-        st.info("탄소 발자국을 줄이는 방법은?")
-        st.info("화장품 용기 분리 수거는?")
-        st.info("생물종이 다양해야 하는 이유는?")
+        st.success(f"새 Thread ID가 생성되었습니다:\n{thread.id}")
+        st.info("이 ID를 기억하면 이후에도 대화를 이어갈 수 있습니다.")
 
-# 스레드 ID 입력란
-thread_id = st.text_input("Thread ID", value=st.session_state.thread_id)
+# ───────────────────────────────────────────
+# ④ 사용자가 Thread ID 직접 입력 가능
+# ───────────────────────────────────────────
+thread_id_input = st.text_input("Thread ID", value=st.session_state.thread_id)
+# 사용자가 입력창을 수정했다면 세션 값도 교체
+if thread_id_input and thread_id_input != st.session_state.thread_id:
+    st.session_state.thread_id = thread_id_input.strip()
 
-# 초기 메시지 설정
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 저는 AI팜 챗봇입니다. 먼저 왼쪽에 있는 'Thread 생성' 버튼을 눌러주시고, 궁금한 점이 있으시면 언제든지 말씀해 주세요. AI가 친절하게 도와드릴게요."}]
+current_thread_id = st.session_state.thread_id  # 가독성을 위한 별칭
 
-# 아이콘을 설정하는 함수
-def get_avatar(role):
-    return "🐵" if role == "user" else "🐶"
+# ───────────────────────────────────────────
+# ⑤ 기존 메시지 출력
+# ───────────────────────────────────────────
+for m in st.session_state.messages:
+    st.chat_message(m["role"]).write(m["content"])
 
-# 메시지 출력
-for msg in st.session_state.messages:
-    avatar = get_avatar(msg["role"])
-    st.chat_message(msg["role"], avatar=avatar).write(msg["content"])
-
-# 사용자 입력 처리
-if prompt := st.chat_input():
-    if not thread_id:
-        st.error("Please add your thread_id to continue.")
+# ───────────────────────────────────────────
+# ⑥ 채팅 입력 & OpenAI 호출
+# ───────────────────────────────────────────
+if prompt := st.chat_input("메시지를 입력하세요"):
+    # 1) Thread ID 확인
+    if not current_thread_id:
+        st.error("먼저 ‘Thread 생성’ 버튼을 누르거나 Thread ID를 입력해 주세요.")
         st.stop()
 
+    # 2) 사용자 메시지 화면에 출력 + 세션 저장
+    st.chat_message("user").write(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user", avatar=get_avatar("user")).write(prompt)
 
-    response = client.beta.threads.messages.create(
-        thread_id,
-        role="user",
-        content=prompt,
-    )
-
-    run = client.beta.threads.runs.create(
-        thread_id=thread_id,
-        assistant_id=assistant_id
-    )
-
-    run_id = run.id
-
-    while True:
-        run = client.beta.threads.runs.retrieve(
-            thread_id=thread_id,
-            run_id=run_id
+    try:
+        # (1) 사용자 메시지를 Thread에 추가
+        client.beta.threads.messages.create(
+            current_thread_id,
+            role="user",
+            content=prompt,
         )
-        if run.status == "completed":
-            break
-        else:
-            time.sleep(2)
 
-    thread_messages = client.beta.threads.messages.list(thread_id)
-    msg = thread_messages.data[0].content[0].text.value
+        # (2) Assistant 실행
+        run = client.beta.threads.runs.create(
+            thread_id=current_thread_id,
+            assistant_id=ASSISTANT_ID,
+        )
 
-    # 어시스턴트의 응답을 한 글자씩 출력
-    st.session_state.messages.append({"role": "assistant", "content": msg})
-    full_message = ""
-    message_placeholder = st.empty()
-    for char in msg:
-        full_message += char
-        message_placeholder.write(f"🐶 {full_message}")
-        time.sleep(0.05) 
+        # (3) 실행 상태 폴링
+        while run.status not in {"completed", "failed", "expired"}:
+            time.sleep(1.5)
+            run = client.beta.threads.runs.retrieve(
+                thread_id=current_thread_id,
+                run_id=run.id,
+            )
+
+        if run.status != "completed":
+            raise RuntimeError(f"Run 끝 상태가 {run.status}입니다.")
+
+        # (4) 최신 메시지 중 assistant 역할만 추출
+        msgs = client.beta.threads.messages.list(current_thread_id).data
+        assistant_msgs = [
+            c.content[0].text.value
+            for c in msgs
+            if c.role == "assistant"
+        ]
+        answer = assistant_msgs[0] if assistant_msgs else "죄송합니다. 답변을 가져오지 못했습니다."
+
+    except Exception as e:
+        # NotFoundError 등 모든 예외를 잡아 사용자에게 설명
+        st.error(f"⚠️ 오류가 발생했습니다: {e}")
+        answer = "오류로 인해 답변을 생성하지 못했습니다. Thread ID를 확인하고 다시 시도해 주세요."
+
+    # 3) 답변을 한 글자씩 출력
+    ai_box = st.chat_message("assistant")
+    placeholder = ai_box.empty()
+    displayed = ""
+    for ch in answer:
+        displayed += ch
+        placeholder.write(displayed)
+        time.sleep(0.03)
+
+    # 4) 세션 상태에 저장
+    st.session_state.messages.append({"role": "assistant", "content": answer})
+
