@@ -11,7 +11,7 @@ client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 
 # 업데이트된 Assistant ID
-assistant_id = "asst_0aakRbXEIqJJnO6QVm75yOFZ"
+assistant_id = "asst_qr6yYrBcphrf4SN52S2ZdEyM"
 
 # 페이지 설정
 st.set_page_config(page_title="농업 AI 챗봇", page_icon="🍃")
