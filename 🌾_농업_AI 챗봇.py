@@ -11,7 +11,7 @@ client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 
 # 업데이트된 Assistant ID
-assistant_id = "asst_qr6yYrBcphrf4SN52S2ZdEyM"
+assistant_id = "asst_0aakRbXEIqJJnO6QVm75yOFZ"
 
 # 페이지 설정
 st.set_page_config(page_title="농업 AI 챗봇", page_icon="🍃")
@@ -77,7 +77,9 @@ thread_id = st.text_input("Thread ID", value=st.session_state.thread_id)
 
 # 초기 메시지 설정
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 안녕하세요, 저는 환경GREEN AI 챗봇입니다. 먼저 왼쪽의 'Thread 생성'버튼을 눌러주세요. 무엇을 도와드릴까요?"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요, 저는 AI팜 챗봇입니다. 먼저 왼쪽에 있는 'Thread 생성' 버튼을 눌러주시고, 궁금한 점이 있으시면 언제든지 말씀해 주세요. AI가 친절하게 도와드릴게요.
+
+"}]
 
 # 아이콘을 설정하는 함수
 def get_avatar(role):
